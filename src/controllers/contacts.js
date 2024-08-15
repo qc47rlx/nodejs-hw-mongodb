@@ -36,7 +36,7 @@ export const getContactByIdController = async (req, res) => {
 
   if (!contact) {
     // 2. Створюємо та налаштовуємо помилку
-    throw createHttpError(404, 'Student not found');
+    throw createHttpError(404, 'Contact not found');
   }
 
   res.json({
