@@ -5,7 +5,7 @@ import {
   getContactByIdController,
   createContactController,
   deleteContactController,
-  patchContactController,
+  changeContactController,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../middlewares/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
@@ -26,6 +26,7 @@ router.post(
   ctrlWrapper(createContactController),
 );
 router.delete('/contacts/:contactId', ctrlWrapper(deleteContactController));
+
 router.patch(
   '/contacts/:contactId',
   isValidID,
