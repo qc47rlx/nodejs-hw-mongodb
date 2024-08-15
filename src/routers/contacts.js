@@ -5,7 +5,7 @@ import {
   getContactByIdController,
   createContactController,
   deleteContactController,
-  patchContactController,
+  changeContactController,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../middlewares/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
@@ -30,7 +30,7 @@ router.patch(
   '/contacts/:contactId',
   isValidID,
   validateBody(schemaContact),
-  ctrlWrapper(patchContactController),
+  ctrlWrapper(changeContactController),
 );
 
 export default router;
