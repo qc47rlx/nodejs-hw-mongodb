@@ -31,7 +31,7 @@ router.patch(
   '/contacts/:contactId',
   isValidID,
   validateBody(schemaContact),
-  ctrlWrapper(patchContactController),
+  ctrlWrapper(changeContactController),
 );
 
 export default router;
