@@ -2,6 +2,7 @@ import { env } from './utils/env.js';
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import router from './routers/index.js';
 import { errorHandler } from './middlewares/errorHandler.js';
@@ -14,6 +15,7 @@ export const setupServer = () => {
 
   app.use(express.json({ type: ['application/json'] }));
   app.use(cors());
+  app.use(cookieParser());
 
   app.use(
     pino({
