@@ -1,5 +1,5 @@
 import { Router } from 'express';
-// import express from 'express';
+import express from 'express';
 import {
   getContactsController,
   getContactByIdController,
@@ -19,13 +19,13 @@ import { checkRoles } from '../middlewares/checkRoles.js';
 import { ROLES } from '../constants/index.js';
 
 const router = Router();
-// const jsonParser = express.json();
+const jsonParser = express.json();
 
 router.use(authenticate);
 
 router.get('/', ctrlWrapper(getContactsController));
 
-router.get('/contacts', ctrlWrapper(getContactsController));
+// router.get('/contacts', ctrlWrapper(getContactsController));
 
 router.get(
   '/:contactId',
@@ -35,13 +35,15 @@ router.get(
 );
 
 router.post(
-  '/register',
+  '/',
+  jsonParser,
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 
 router.delete(
   '/:contactId',
+  isValidID,
   checkRoles(ROLES.AUTOR),
   ctrlWrapper(deleteContactController),
 );
@@ -49,7 +51,6 @@ router.delete(
 router.patch(
   '/:contactId',
   checkRoles(ROLES.AUTOR),
-  isValidID,
   validateBody(updateContactSchema),
   ctrlWrapper(changeContactController),
 );
