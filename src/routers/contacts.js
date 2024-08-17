@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import express from 'express';
 
 import {
   getContactsController,
@@ -13,6 +14,7 @@ import { schemaContact } from '../validation/contacts.js';
 import { isValidID } from '../middlewares/isValidId.js';
 
 const router = Router();
+const jsonParser = express.json();
 
 router.get('/contacts', ctrlWrapper(getContactsController));
 router.get(
@@ -29,7 +31,7 @@ router.delete('/contacts/:contactId', ctrlWrapper(deleteContactController));
 
 router.patch(
   '/contacts/:contactId',
-  isValidID,
+  jsonParser,
   validateBody(schemaContact),
   ctrlWrapper(changeContactController),
 );
