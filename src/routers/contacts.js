@@ -12,21 +12,27 @@ import { ctrlWrapper } from '../middlewares/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { schemaContact, schemaContactPatch } from '../validation/contacts.js';
 import { isValidID } from '../middlewares/isValidId.js';
+import { authenticate } from '../middlewares/authenticate.js';
+import { checkRoles } from '../middlewares/checkRoles.js';
+import { ROLES } from '../constants/index.js';
 
 const router = Router();
+
 router.use(express.json());
 
 router.get('/contacts', ctrlWrapper(getContactsController));
 
 router.get(
-  '/contacts/:contactId',
+  '/:contactId',
+  checkRoles(ROLES.AUTOR),
   isValidID,
   ctrlWrapper(getContactByIdController),
 );
 
 router.post(
-  '/contacts',
-  validateBody(schemaContact),
+  '/',
+  jsonParser,
+  validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 
@@ -36,8 +42,8 @@ router.delete(
   ctrlWrapper(deleteContactController),
 );
 
-router.patch(
-  '/contacts/:contactId',
+router.delete(
+  '/:contactId',
   isValidID,
   validateBody(schemaContactPatch),
   ctrlWrapper(changeContactController),
