@@ -10,7 +10,7 @@ import {
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../middlewares/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { schemaContact } from '../validation/contacts.js';
+import { schemaContact, schemaContactPatch } from '../validation/contacts.js';
 import { isValidID } from '../middlewares/isValidId.js';
 
 const router = Router();
@@ -39,7 +39,7 @@ router.delete(
 router.patch(
   '/contacts/:contactId',
   isValidID,
-  validateBody(schemaContact),
+  validateBody(schemaContactPatch),
   ctrlWrapper(changeContactController),
 );
 
