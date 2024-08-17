@@ -18,11 +18,7 @@ const jsonParser = express.json();
 
 router.get('/contacts', ctrlWrapper(getContactsController));
 
-router.get(
-  '/contacts/:contactId',
-  isValidID,
-  ctrlWrapper(getContactByIdController),
-);
+router.get('/contacts/:contactId', ctrlWrapper(getContactByIdController));
 
 router.post(
   '/contacts',
