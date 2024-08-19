@@ -1,6 +1,6 @@
-import { model, Schema } from 'mongoose';
+import mongoose from 'mongoose';
 
-const contactsSchema = new Schema(
+const contactsSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -24,10 +24,6 @@ const contactsSchema = new Schema(
       enum: ['work', 'home', 'personal'],
       default: 'personal',
     },
-    userId: {
-      type: Schema.Types.ObjectId,
-      required: true,
-    },
   },
   {
     timestamps: true,
@@ -35,5 +31,5 @@ const contactsSchema = new Schema(
   },
 );
 //  s
-const ContactsCollection = model('contacts', contactsSchema);
+const ContactsCollection = mongoose.model('contacts', contactsSchema);
 export default ContactsCollection;
