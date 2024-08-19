@@ -1,10 +1,10 @@
-import ContactsCollection from '../db/models/contact.js';
+import { ContactsCollection } from '../db/models/contact.js';
 import { SORT_ORDER } from '../constants/index.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 const getAllContacts = async ({
-  page,
-  perPage,
+  page = 1,
+  perPage = 10,
   sortOrder = SORT_ORDER.ASC,
   sortBy = '_id',
   filter = {},
@@ -14,7 +14,7 @@ const getAllContacts = async ({
 
   let contactsQuery = ContactsCollection.find();
 
-  if (filter.isFavourite !== undefined) {
+  if (filter.isFavourite) {
     contactsQuery = contactsQuery
       .where('isFavourite')
       .equals(filter.isFavourite);
@@ -26,15 +26,14 @@ const getAllContacts = async ({
       .equals(filter.contactType);
   }
 
-  // Получаем количество всех документов с фильтром
-  const contactsCount = await ContactsCollection.find(filter).countDocuments();
-
-  // Получаем контакты с пагинацией
-  const contacts = await contactsQuery
-    .skip(skip)
-    .limit(limit)
-    .sort({ [sortBy]: sortOrder })
-    .exec();
+  const [contactsCount, contacts] = await Promise.all([
+    ContactsCollection.find().merge(contactsQuery).countDocuments(),
+    contactsQuery
+      .skip(skip)
+      .limit(limit)
+      .sort({ [sortBy]: sortOrder })
+      .exec(),
+  ]);
 
   // Вычисляем данные для пагинации
   const paginationData = calculatePaginationData(contactsCount, perPage, page);
