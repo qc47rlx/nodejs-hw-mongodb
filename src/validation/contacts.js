@@ -6,7 +6,8 @@ export const schemaContact = Joi.object({
   phoneNumber: Joi.string()
     .min(3)
     .max(20)
-    .pattern(/[+*0-9]{3,20}$/),
+    .pattern(/[+*0-9]{3,20}$/)
+    .required(),
 
   email: Joi.string()
     .min(3)
