@@ -26,17 +26,20 @@ const getAllContacts = async ({
       .equals(filter.contactType);
   }
 
-  const [contactsCount, contacts] = await Promise.all([
-    ContactsCollection.find(filter).countDocuments(),
-    contactsQuery
-      .skip(skip)
-      .limit(limit)
-      .sort({ [sortBy]: sortOrder })
-      .exec(),
-  ]);
+  // Получаем количество всех документов с фильтром
+  const contactsCount = await ContactsCollection.find(filter).countDocuments();
 
+  // Получаем контакты с пагинацией
+  const contacts = await contactsQuery
+    .skip(skip)
+    .limit(limit)
+    .sort({ [sortBy]: sortOrder })
+    .exec();
+
+  // Вычисляем данные для пагинации
   const paginationData = calculatePaginationData(contactsCount, perPage, page);
 
+  // Возвращаем данные и информацию о пагинации
   return {
     data: contacts,
     ...paginationData,
