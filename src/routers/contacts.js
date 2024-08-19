@@ -19,7 +19,11 @@ router.use(express.json());
 
 router.get('/contacts', ctrlWrapper(getContactsController));
 
-router.get('/:contactId', isValidID, ctrlWrapper(getContactByIdController));
+router.get(
+  '/contacts/:contactId',
+  isValidID,
+  ctrlWrapper(getContactByIdController),
+);
 
 router.post(
   '/',
@@ -34,7 +38,7 @@ router.delete(
 );
 
 router.patch(
-  '/:contactId',
+  '/contacts/:contactId',
   isValidID,
   validateBody(schemaContact),
   ctrlWrapper(changeContactController),
