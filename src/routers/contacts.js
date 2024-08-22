@@ -14,13 +14,21 @@ import { schemaContact } from '../validation/contacts.js';
 import { isValidID } from '../middlewares/isValidId.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
-const router = Router();
+import { checkRoles } from '../middlewares/checkRoles.js';
+import { ROLES } from '../constants/index.js';
 
+const router = Router();
 router.use(express.json());
+router.use(authenticate);
 
 router.get('/', ctrlWrapper(getContactsController));
 
-router.get('/:contactId', isValidID, ctrlWrapper(getContactByIdController));
+router.get(
+  '/:contactId',
+  checkRoles(ROLES.AUTOR),
+  isValidID,
+  ctrlWrapper(getContactByIdController),
+);
 
 router.post(
   '/register',
@@ -28,17 +36,19 @@ router.post(
   ctrlWrapper(createContactController),
 );
 
-router.delete('/:contactId', isValidID, ctrlWrapper(deleteContactController));
+router.delete(
+  '/:contactId',
+  isValidID,
+  checkRoles(ROLES.AUTOR),
+  ctrlWrapper(deleteContactController),
+);
 
 router.patch(
   '/:contactId',
   isValidID,
+  checkRoles(ROLES.AUTOR),
   validateBody(schemaContact),
   ctrlWrapper(changeContactController),
 );
-
-router.use(authenticate);
-
-router.get('/', ctrlWrapper(getContactsController));
 
 export default router;
