@@ -8,6 +8,7 @@ const getAllContacts = async ({
   sortOrder = SORT_ORDER.ASC,
   sortBy = '_id',
   filter = {},
+  userId,
 }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
@@ -25,6 +26,8 @@ const getAllContacts = async ({
       .where('contactType')
       .equals(filter.contactType);
   }
+
+  contactsQuery.where('userId').equals(userId);
 
   const [contactsCount, contacts] = await Promise.all([
     ContactsCollection.find().merge(contactsQuery).countDocuments(),
@@ -45,8 +48,8 @@ const getAllContacts = async ({
   };
 };
 
-function getContactById(contactId) {
-  return ContactsCollection.findById(contactId);
+function getContactById(contactId, userId) {
+  return ContactsCollection.findById({ _id: contactId, userId });
 }
 
 // new - - -
@@ -55,13 +58,13 @@ function createContact(contact) {
   return ContactsCollection.create(contact);
 }
 
-function deleteContact(contactId) {
-  return ContactsCollection.findByIdAndDelete(contactId);
+function deleteContact(contactId, userId) {
+  return ContactsCollection.findByIdAndDelete({ _id: contactId, userId });
 }
 
-const patchContact = async (contactId, payload, options) => {
+const patchContact = async (contactId, userId, payload, options) => {
   const rawResult = await ContactsCollection.findOneAndUpdate(
-    { _id: contactId },
+    { _id: contactId, userId },
     payload,
     {
       new: true,
@@ -71,7 +74,7 @@ const patchContact = async (contactId, payload, options) => {
   );
 
   if (!rawResult || !rawResult.value) return null;
-
+  console.log(rawResult._id);
   return {
     contact: rawResult.value,
     isNew: Boolean(rawResult?.lastErrorObject?.upserted),

@@ -31,7 +31,7 @@ router.get(
 );
 
 router.post(
-  '/register',
+  '/',
   validateBody(schemaContact),
   ctrlWrapper(createContactController),
 );
