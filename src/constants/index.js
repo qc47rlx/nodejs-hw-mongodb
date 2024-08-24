@@ -9,3 +9,13 @@ export const ONE_DAY = 24 * 60 * 60 * 1000;
 export const ROLES = {
   AUTOR: 'userID',
 };
+
+// 6666666666
+
+export const SMTP = {
+  SMTP_HOST: 'SMTP_HOST',
+  SMTP_PORT: 'SMTP_PORT',
+  SMTP_USER: 'SMTP_USER',
+  SMTP_PASSWORD: 'SMTP_PASSWORD',
+  SMTP_FROM: 'SMTP_FROM',
+};
